@@ -1,0 +1,52 @@
+.m-btn {
+    display: flex;
+    align-items: center;
+    background-color: #019160;
+    border-radius: 4px;
+    height: 40px;
+    font-size: 15px;
+    color: white;
+    font-family: 'Rosario', sans-serif;
+    padding-left: 16px;
+    padding-right: 16px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.m-btn:hover {
+    background-color: #2fbe8e;
+}
+
+.m-btn .m-btn-icon {
+    background-position: center;
+}
+
+.m-btn .btn-text {
+    margin-left: 8px;
+}
+
+.m-second-button {
+    border: 1px solid #bbbbbb;   
+    border-radius: 4px;
+    height: 40px;
+    color: white;
+    padding-left: 24px;
+    padding-right: 24px;
+    text-align: center;
+    outline: none;
+    cursor: pointer;
+}
+
+.m-second-button:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+.m-btn-refresh {
+    background-image: url('../../assets/img/refresh.svg');
+    background-repeat: no-repeat;
+    height: 38px;
+    width: 38px;
+    background-position: center;
+    background-color: white;
+}

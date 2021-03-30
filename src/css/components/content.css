@@ -1,0 +1,123 @@
+.content {
+    width: calc(100% - 221px);
+    height: calc(100vh - 61px);
+    background-color: white;
+    position: absolute;
+    top: 61px;
+    left: 221px;
+}
+
+/* page title */
+.content .header-content {
+    padding: 20px 0 12px 12px;
+    display: flex;
+    align-items: center;
+}
+
+.content .header-content .title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.content .header-content .content-feature {
+    position: absolute;
+    right: 12px;
+}
+
+.content .paging-bar {
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+}
+
+.paging-bar p {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.paging-bar .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination .item {
+    color: #000;
+    padding: 10px 10px;
+    border: 1px solid #bbb;
+    font-size: 16px;
+    width: 20px;  
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+.pagination .page {
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 20px;
+    border: none;
+}
+
+.item.first-page {
+    background-image: url('../../assets/icon/btn-firstpage.svg');
+}
+
+.item.first-page:hover {
+    background-image: url('../../assets/icon/btn-firstpage-active.svg');
+}
+
+.item.prev-page {
+    background-image: url('../../assets/icon/btn-prev-page.svg');
+}
+
+.item.prev-page:hover {
+    background-image: url('../../assets/icon/btn-prev-page-active.svg');
+}
+
+.item.next-page {
+    background-image: url('../../assets/icon/btn-next-page.svg');
+}
+
+.item.next-page:hover {
+    background-image: url('../../assets/icon/btn-next-page-active.svg');
+}
+
+.item.last-page {
+    background-image: url('../../assets/icon/btn-lastpage.svg');
+}
+
+.item.last-page:hover {
+    background-image: url('../../assets/icon/btn-lastpage-active.svg');
+}
+
+.item>span {
+    display: flex;
+    justify-content: center;
+}
+
+.pagination .item.active {
+    background-color: #019160;
+    color: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.pagination .item:hover:not(.active) {
+    background-color: #019160;
+    color: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+@media (max-width: 1010px) {
+    .content {
+        width: 100%;
+        left: 0;
+    }
+
+    .header {
+        width: 100% !important;
+    }
+}
