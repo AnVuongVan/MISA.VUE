@@ -27,10 +27,10 @@ export default ({
     methods: {
         ...mapActions(['deleteCustomer']),
         //fuction to remove customer
-        removeCustomer() {
+        removeCustomer() {     
             this.listIds.forEach(id => this.deleteCustomer(id));
-            this.$emit('isDeleted', true);
-            this.$emit("statusPopup", false);
+            this.$emit('isDeleted', true);  
+            this.$emit("statusPopup", false); 
         },
         hidePopup() {
             //pass value to parent components (CustomerList)

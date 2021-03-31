@@ -39,7 +39,7 @@
                         <th fieldName="PhoneNumber">So dien thoai</th>
                         <th fieldName="Email">Email</th>
                         <th fieldName="Address">Dia chi</th>
-                        <th fieldName="DebitAmount">So tien no</th>
+                        <th fieldName="DebitAmount">Ma so thue</th>
                         <th fieldName="MemberCardCode">Ma the thanh vien</th>
                     </tr>
                 </thead>
@@ -57,7 +57,7 @@
                         <td>{{ customer.PhoneNumber }}</td>
                         <td>{{ customer.Email }}</td>
                         <td>{{ customer.Address }}</td>
-                        <td>{{ customer.DebitAmount }}</td>
+                        <td>{{ customer.CompanyTaxCode }}</td>
                         <td>{{ customer.MemberCardCode }}</td>
                     </tr>
                 </tbody>
@@ -80,11 +80,19 @@
         </div>
 
         <span v-if="statusListDetail">
-            <CustomerListDetail @statusModal="statusModal" :customer="item" />
+            <CustomerListDetail @statusModal="statusModal" @statusAlert="statusAlert" :customer="item" />
         </span>
 
         <span v-if="statusShowPopup">
             <Popup @statusPopup="statusPopup" @isDeleted="isDeleted" :listIds="listIds" />
+        </span>
+
+        <span v-if="statusAlertNotify">
+            <AlertSuccess :statusAlertSuccess="statusAlertNotify" @isHide="statusAlert" />
+        </span>
+
+        <span v-if="false">
+            <AlertError />
         </span>
     </div>
 </template>
@@ -92,19 +100,26 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import CustomerListDetail from './CustomerListDetail';
+
 import Popup from '../../../base/Popup';
+import AlertSuccess from '../../../base/AlertSuccess';
+import AlertError from '../../../base/AlertError';
+
 import moment from 'moment'
 
 export default{
     name: 'CustomerList',
     components: {
         CustomerListDetail,
-        Popup
+        Popup,
+        AlertSuccess,
+        AlertError
     },
     data() {
         return {
             statusListDetail: false,
             statusShowPopup: false,
+            statusAlertNotify: '',
             item: {},
             listIds: []
         }
@@ -127,7 +142,11 @@ export default{
             //if customer removed -> set empty list
             if (params) {
                 this.listIds = [];
+                this.statusAlertNotify = 'DELETE';
             }
+        },
+        statusAlert(params) {
+            this.statusAlertNotify = params;
         },
         //function to edit customer
         onDoubleClick(customer) {

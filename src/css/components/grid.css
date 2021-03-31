@@ -18,6 +18,7 @@ table th, td {
     text-overflow: ellipsis;
     white-space: nowrap;
     padding: 15px 12px;
+    user-select: none;
 }
 
 table thead th { 
@@ -25,7 +26,6 @@ table thead th {
     top: 0;
     z-index: 1;
     background: #fff;
-    position: -webkit-sticky;
 }
 
 table tbody tr:nth-child(2n + 1) {

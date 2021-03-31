@@ -179,8 +179,10 @@ export default{
             //if have CustomerId -> update
             if (this.formData.CustomerId) {
                 this.updateCustomer(this.formData);
+                this.$emit("statusAlert", "UPDATE");
             } else {
                 this.addCustomer(this.formData);
+                this.$emit("statusAlert", "ADD");
             }  
             this.$emit("statusModal", false);
         },

@@ -1,5 +1,8 @@
 import axios from 'axios'
 
+const API_URL = 'http://api.manhnv.net/api/customers';
+//const API_URL = 'http://localhost:62509/api/v1/customers';
+
 const state = {
     customers: []
 };
@@ -10,11 +13,11 @@ const getters = {
 
 const actions = {
     async fetchCustomers({ commit }) {
-        const response = await axios.get('http://api.manhnv.net/api/customers');
+        const response = await axios.get(API_URL);
         commit('setCustomers', response.data);
     },
     async addCustomer({ commit }, formData) {
-        const response = await axios.post('http://api.manhnv.net/api/customers', 
+        const response = await axios.post(API_URL, 
             JSON.stringify(formData), {
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,7 +28,7 @@ const actions = {
         commit('newCustomer', formData);
     },
     async updateCustomer({ commit }, customer) {
-        const response = await axios.put(`http://api.manhnv.net/api/customers/${customer.CustomerId}`,
+        const response = await axios.put(`${API_URL}/${customer.CustomerId}`,
             JSON.stringify(customer), {
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +39,7 @@ const actions = {
         commit('updateCustomer', customer);
     },
     async deleteCustomer({ commit }, id) {
-        await axios.delete(`http://api.manhnv.net/api/customers/${id}`);
+        await axios.delete(`${API_URL}/${id}`);
         commit('removeCustomer', id);
     }
 };

@@ -38,6 +38,7 @@ export default {
 	@import './css/components/grid.css';
 	@import './css/components/dialog.css';
 	@import './css/components/popup.css';
+	@import './css/components/alert.css';
 
 	.text-align-right {
 		text-align: right;
