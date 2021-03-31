@@ -34,6 +34,10 @@ const actions = {
         );
         console.log(response);
         commit('updateCustomer', customer);
+    },
+    async deleteCustomer({ commit }, id) {
+        await axios.delete(`http://api.manhnv.net/api/customers/${id}`);
+        commit('removeCustomer', id);
     }
 };
 
@@ -45,7 +49,8 @@ const mutations = {
         if (index !== -1) {
             state.customers.splice(index, 1, customer);
         }
-    }
+    },
+    removeCustomer: (state, id) => state.customers = state.customers.filter(customer => customer.CustomerId !== id)
 };
 
 export default {

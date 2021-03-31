@@ -21,7 +21,8 @@
                 </select>
             </div>
             <div class="filter-right">
-                <button class="m-btn-refresh m-second-button" id="btnRefresh"></button>
+                <button class="m-btn-remove m-second-button" @click="removeCustomer"></button>
+                <button class="m-btn-refresh m-second-button" @click="refreshListCustomers"></button>
             </div>
         </div>
 
@@ -29,7 +30,7 @@
             <table border="1" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th fieldName="Checkbox"><input type="checkbox" id="checkAll" /></th>
+                        <th fieldName="Checkbox"><input type="checkbox" /></th>
                         <th fieldName="Index">#</th>
                         <th fieldName="CustomerCode">Ma khach hang</th>
                         <th fieldName="FullName">Ho va ten</th>
@@ -46,7 +47,7 @@
                     <tr v-for="(customer, index) in allCustomers" :key="customer.CustomerId"
                     @dblclick="onDoubleClick(customer)">
                         <td>
-                            <input type="checkbox" class="child-checkbox">
+                            <input type="checkbox" @change="getChecked(customer.CustomerId, $event)">
                         </td>
                         <td>{{ index + 1 }}</td>
                         <td>{{ customer.CustomerCode }}</td>
@@ -81,37 +82,80 @@
         <span v-if="statusListDetail">
             <CustomerListDetail @statusModal="statusModal" :customer="item" />
         </span>
+
+        <span v-if="statusShowPopup">
+            <Popup @statusPopup="statusPopup" @isDeleted="isDeleted" :listIds="listIds" />
+        </span>
     </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import CustomerListDetail from './CustomerListDetail';
+import Popup from '../../../base/Popup';
 import moment from 'moment'
 
 export default{
     name: 'CustomerList',
     components: {
         CustomerListDetail,
+        Popup
     },
     data() {
         return {
             statusListDetail: false,
+            statusShowPopup: false,
             item: {},
+            listIds: []
         }
     },
     methods: {
         ...mapActions(['fetchCustomers']),
+        //show when add new customer
         showListDetail() {
             this.item = {};
             this.statusListDetail = !this.statusListDetail;
         },
+        //receive params status from child components
         statusModal(params) {
             this.statusListDetail = params;
         },
+        statusPopup(params) {
+            this.statusShowPopup = params;
+        },
+        isDeleted(params) {
+            //if customer removed -> set empty list
+            if (params) {
+                this.listIds = [];
+            }
+        },
+        //function to edit customer
         onDoubleClick(customer) {
             this.item = Object.assign({}, customer);
             this.statusListDetail = !this.statusListDetail;
+        },
+        //function remove customer
+        removeCustomer() {
+            if (this.listIds.length !== 0) {
+                this.statusShowPopup = true;
+            } else {
+                alert('Ban chua chon ban ghi nao de xoa!');
+            }
+        },
+        //catch event click every input checkbox
+        getChecked(id, e) {
+            if (e.target.checked) {
+                this.listIds.push(id);
+            } else {
+                let position = this.listIds.indexOf(id);
+                if (position !== -1) {
+                    this.listIds.splice(position, 1);
+                }
+            }
+        },
+        //refresh list customers page
+        refreshListCustomers() {
+            this.fetchCustomers();
         },
         //function format date to show
         formatDate(dateTime){

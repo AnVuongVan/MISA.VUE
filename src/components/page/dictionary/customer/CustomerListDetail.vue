@@ -24,7 +24,7 @@
                                     <div class="customer-item">
                                         <div class="m-label">Ma khach hang <span style="color: red;">(*)</span></div>
                                         <div class="m-control">
-                                            <input v-model="formData.CustomerCode" class="input-required" type="text" required>
+                                            <input v-model="formData.CustomerCode" class="input-required" type="text" required ref="CustomerCode">
                                         </div>
                                     </div>
 
@@ -208,6 +208,9 @@ export default{
         if (this.formData.CustomerGroupId) {
             this.$refs.selectOptions.click();
         }
+
+        //auto focus customer code input
+        this.$refs.CustomerCode.focus();
     }
 }
 </script>

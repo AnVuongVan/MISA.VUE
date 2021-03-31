@@ -50,3 +50,13 @@
     background-position: center;
     background-color: white;
 }
+
+.m-btn-remove {
+    background-image: url('../../assets/icon/trash.svg');
+    background-repeat: no-repeat;
+    height: 38px;
+    width: 38px;
+    background-position: center;
+    background-color: white;
+    margin-right: 10px;
+}
