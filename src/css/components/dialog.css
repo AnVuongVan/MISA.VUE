@@ -180,6 +180,7 @@ input[type="radio"] {
 .dialog-footer-close {
     margin-right: 24px;
     padding: 9.5px 20px;
+    user-select: none;
 }
 
 .dialog-footer-close:hover {
@@ -203,6 +204,7 @@ input[type="radio"] {
     color: white;
     outline: none;
     margin-left: 16px;
+    user-select: none;
 }
 
 .dialog-footer-save button:hover {

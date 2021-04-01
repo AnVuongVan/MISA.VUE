@@ -24,14 +24,16 @@
                                     <div class="customer-item">
                                         <div class="m-label">Ma khach hang <span style="color: red;">(*)</span></div>
                                         <div class="m-control">
-                                            <input v-model="formData.CustomerCode" class="input-required" type="text" required ref="CustomerCode">
+                                            <input v-model.trim="formData.CustomerCode" ref="CustomerCode" type="text" 
+                                            :class="{'is-invalid': validateStatus($v.formData.CustomerCode)}">
                                         </div>
                                     </div>
 
                                     <div class="name-item">
                                         <div class="m-label">Ho va ten <span style="color: red;">(*)</span></div>
                                         <div class="m-control">
-                                            <input v-model="formData.FullName" class="input-required" type="text" required>
+                                            <input v-model.trim="formData.FullName" type="text" 
+                                            :class="{'is-invalid': validateStatus($v.formData.FullName)}">
                                         </div>
                                     </div>
                                 </div>
@@ -40,7 +42,7 @@
                                     <div class="member-code-item">
                                         <div class="m-label">Ma the thanh vien</div>
                                         <div class="m-control">
-                                            <input v-model="formData.MemberCardCode" type="text">
+                                            <input v-model.trim="formData.MemberCardCode" type="text">
                                         </div>
                                     </div>
 
@@ -88,14 +90,16 @@
                             <div class="col-8">
                                 <div class="m-label">Email</div>
                                 <div class="m-control">
-                                    <input type="email" v-model="formData.Email">
+                                    <input type="email" v-model.trim="formData.Email" 
+                                    :class="{'is-invalid': validateStatus($v.formData.Email)}">
                                 </div>
                             </div>
 
                             <div class="col-4">
                                 <div class="m-label">So dien thoai <span style="color: red;">(*)</span></div>
                                 <div class="m-control">
-                                    <input type="text" v-model="formData.PhoneNumber" class="input-required" required>
+                                    <input type="text" v-model.trim="formData.PhoneNumber" 
+                                    :class="{'is-invalid': validateStatus($v.formData.PhoneNumber)}">
                                 </div>
                             </div>
                         </div>
@@ -104,14 +108,14 @@
                             <div class="col-8 company-name-item">
                                 <div class="m-label">Ten cong ty</div>
                                 <div class="m-control">
-                                    <input type="text" v-model="formData.CompanyName">
+                                    <input type="text" v-model.trim="formData.CompanyName">
                                 </div>
                             </div>
 
                             <div class="col-4 tax-code-item">
                                 <div class="m-label">Ma so thue</div>
                                 <div class="m-control">
-                                    <input type="text" v-model="formData.CompanyTaxCode">
+                                    <input type="text" v-model.trim="formData.CompanyTaxCode">
                                 </div>
                             </div>
                         </div>
@@ -120,7 +124,7 @@
                             <div class="col-12 address-item">
                                 <div class="m-label">Dia chi</div>
                                 <div class="m-control">
-                                    <input type="text" v-model="formData.Address">
+                                    <input type="text" v-model.trim="formData.Address">
                                 </div>
                             </div>
                         </div>
@@ -147,6 +151,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import { mapActions } from 'vuex';
+import { required, email } from 'vuelidate/lib/validators'
 
 export default{
     name: 'CustomerListDetail',
@@ -157,7 +162,6 @@ export default{
                 CustomerCode: '',
                 FullName: '',
                 Gender: '',
-                GenderName: '',
                 Address: '',
                 DateOfBirth: '',
                 Email: '',
@@ -171,11 +175,27 @@ export default{
             customerGroups: []
         }
     },
+    validations: {
+        formData: {
+            CustomerCode: { required },
+            FullName: { required },
+            Email: { email },
+            PhoneNumber: { required }
+        }
+    },
     methods: {
         ...mapActions(['addCustomer', 'updateCustomer']),
+        validateStatus: function(validation) {
+            return typeof validation != 'undefined'? validation.$error : false;
+        },
         //form submit to create or update
         onSubmit(e) {
             e.preventDefault();
+
+            //check validate
+            this.$v.formData.$touch();
+            if (this.$v.formData.$pending || this.$v.formData.$error) return;
+
             //if have CustomerId -> update
             if (this.formData.CustomerId) {
                 this.updateCustomer(this.formData);
@@ -216,3 +236,9 @@ export default{
     }
 }
 </script>
+
+<style scoped>
+.is-invalid {
+    border: 1px solid red;
+}
+</style>
