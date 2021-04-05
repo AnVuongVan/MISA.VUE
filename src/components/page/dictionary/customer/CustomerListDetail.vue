@@ -150,7 +150,7 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { required, email } from 'vuelidate/lib/validators'
 
 export default{
@@ -185,6 +185,7 @@ export default{
     },
     methods: {
         ...mapActions(['addCustomer', 'updateCustomer']),
+        ...mapGetters(['errors']),
         validateStatus: function(validation) {
             return typeof validation != 'undefined'? validation.$error : false;
         },
@@ -193,24 +194,35 @@ export default{
             e.preventDefault();
 
             //check validate
+            this.errors = [];
             this.$v.formData.$touch();
             if (this.$v.formData.$pending || this.$v.formData.$error) return;
 
             //if have CustomerId -> update
             if (this.formData.CustomerId) {
                 this.updateCustomer(this.formData);
-                this.$emit("statusAlert", "UPDATE");
+                this.$emit("statusAlert", "UPDATE");  
             } else {
                 this.addCustomer(this.formData);
                 this.$emit("statusAlert", "ADD");
-            }  
-            this.$emit("statusModal", false);
+            }
+           
+           setTimeout(show.bind(this), 3000);
+           function show() {
+               if (this.errors.length > 0) {
+                    console.log(this.errors);
+                } else {
+                    this.$emit("statusModal", false);
+                }
+           }
+           console.log(this.errors);  
         },
         //set value for select options of group
         async setOptionsSelect() {
-            const response = await axios.get('http://api.manhnv.net/api/customergroups');
+            //const API_GROUP = 'http://api.manhnv.net/api/customergroups';
+            const API_GROUP = 'http://localhost:62509/api/v1/customergroups/';
+            const response = await axios.get(`${API_GROUP}`);
             this.customerGroups = response.data;
-            console.log(response.data);
         },
         hideListDetail() {
             //pass value to parent components (CustomerList)

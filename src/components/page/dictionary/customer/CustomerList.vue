@@ -91,9 +91,9 @@
             <AlertSuccess :statusAlertSuccess="statusAlertNotify" @isHide="statusAlert" />
         </span>
 
-        <span v-if="false">
-            <AlertError />
-        </span>
+        <!-- <span v-if="statusAlertError">
+            <AlertError :statusAlertError="statusAlertError" @isHide="statusAlert" />
+        </span> -->
     </div>
 </template>
 
@@ -103,7 +103,7 @@ import CustomerListDetail from './CustomerListDetail';
 
 import Popup from '../../../base/Popup';
 import AlertSuccess from '../../../base/AlertSuccess';
-import AlertError from '../../../base/AlertError';
+//import AlertError from '../../../base/AlertError';
 
 import moment from 'moment'
 
@@ -113,15 +113,17 @@ export default{
         CustomerListDetail,
         Popup,
         AlertSuccess,
-        AlertError
+        //AlertError
     },
     data() {
         return {
             statusListDetail: false,
             statusShowPopup: false,
             statusAlertNotify: '',
+            //statusAlertError: '',
             item: {},
-            listIds: []
+            listIds: [],
+            error: false
         }
     },
     methods: {
@@ -177,13 +179,15 @@ export default{
             this.fetchCustomers();
         },
         //function format date to show
-        formatDate(dateTime){
+        formatDate(dateTime) {
             if (dateTime) {
                 return moment(String(dateTime)).format('DD-MM-YYYY');
             }
         }
     },
-    computed: mapGetters(['allCustomers']),
+    computed: {
+        ...mapGetters(['allCustomers']),
+    },
     created() {
         this.fetchCustomers();
     }

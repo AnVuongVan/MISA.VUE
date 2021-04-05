@@ -1,14 +1,16 @@
 import axios from 'axios'
 
-const API_URL = 'http://api.manhnv.net/api/customers';
-//const API_URL = 'http://localhost:62509/api/v1/customers';
+//const API_URL = 'http://api.manhnv.net/api/customers';
+const API_URL = 'http://localhost:62509/api/v1/customers';
 
 const state = {
-    customers: []
+    customers: [],
+    errors: [],
 };
 
 const getters = {
     allCustomers: state => state.customers,
+    errors: state => state.errors
 };
 
 const actions = {
@@ -17,30 +19,41 @@ const actions = {
         commit('setCustomers', response.data);
     },
     async addCustomer({ commit }, formData) {
-        const response = await axios.post(API_URL, 
-            JSON.stringify(formData), {
-                headers: {
-                    'Content-Type': 'application/json',
+        try {
+            const response = await axios.post(API_URL, 
+                JSON.stringify(formData), {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
                 }
-            }
-        );
-        console.log(response);
-        commit('newCustomer', formData);
+            );
+
+            commit('newCustomer', response.data.Body);
+            commit('changeErrors', []);
+        } catch (err) {
+            commit('changeErrors', err.response.data.Data);
+        }
     },
     async updateCustomer({ commit }, customer) {
-        const response = await axios.put(`${API_URL}/${customer.CustomerId}`,
-            JSON.stringify(customer), {
-                headers: {
-                    'Content-Type': 'application/json',
+        try {
+            const response = await axios.put(`${API_URL}/${customer.CustomerId}`,
+                JSON.stringify(customer), {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
                 }
-            }
-        );
-        console.log(response);
-        commit('updateCustomer', customer);
+            );
+            commit('updateCustomer', response.data.Body);
+            commit('changeErrors', []);
+        } catch (err) {
+            commit('changeErrors', err.response.data.Data);
+        }      
     },
     async deleteCustomer({ commit }, id) {
-        await axios.delete(`${API_URL}/${id}`);
-        commit('removeCustomer', id);
+        const response = await axios.delete(`${API_URL}/${id}`);
+        if (response.data.MISACode == 200) {
+            commit('removeCustomer', id);
+        } 
     }
 };
 
@@ -53,7 +66,8 @@ const mutations = {
             state.customers.splice(index, 1, customer);
         }
     },
-    removeCustomer: (state, id) => state.customers = state.customers.filter(customer => customer.CustomerId !== id)
+    removeCustomer: (state, id) => state.customers = state.customers.filter(customer => customer.CustomerId !== id),
+    changeErrors: (state, errors) => state.errors = errors,
 };
 
 export default {
