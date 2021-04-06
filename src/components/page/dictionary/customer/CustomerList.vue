@@ -35,7 +35,7 @@
                         <th fieldName="CustomerCode">Ma khach hang</th>
                         <th fieldName="FullName">Ho va ten</th>
                         <th fieldName="GenderName">Gioi tinh</th>
-                        <th fieldName="DateOfBirth" formatType="ddmmyyyy">Ngay sinh</th>
+                        <th fieldName="DateOfBirth">Ngay sinh</th>
                         <th fieldName="PhoneNumber">So dien thoai</th>
                         <th fieldName="Email">Email</th>
                         <th fieldName="Address">Dia chi</th>
@@ -49,16 +49,16 @@
                         <td>
                             <input type="checkbox" @change="getChecked(customer.CustomerId, $event)">
                         </td>
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ customer.CustomerCode }}</td>
-                        <td>{{ customer.FullName }}</td>
-                        <td>{{ customer.GenderName }}</td>
-                        <td>{{ formatDate(customer.DateOfBirth) }}</td>
-                        <td>{{ customer.PhoneNumber }}</td>
-                        <td>{{ customer.Email }}</td>
-                        <td>{{ customer.Address }}</td>
-                        <td>{{ customer.CompanyTaxCode }}</td>
-                        <td>{{ customer.MemberCardCode }}</td>
+                        <td v-text="index + 1"></td>
+                        <td v-text="customer.CustomerCode"></td>
+                        <td v-text="customer.FullName"></td>
+                        <td v-text="customer.GenderName"></td>
+                        <td v-text="formatDate(customer.DateOfBirth)"></td>
+                        <td v-text="customer.PhoneNumber"></td>
+                        <td v-text="customer.Email"></td>
+                        <td v-text="customer.Address"></td>
+                        <td v-text="customer.CompanyTaxCode"></td>
+                        <td v-text="customer.MemberCardCode"></td>
                     </tr>
                 </tbody>
             </table>
@@ -189,6 +189,9 @@ export default{
         ...mapGetters(['allCustomers']),
     },
     created() {
+        this.fetchCustomers();
+    },
+    updated() {
         this.fetchCustomers();
     }
 }

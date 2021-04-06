@@ -5,12 +5,10 @@ const API_URL = 'http://localhost:62509/api/v1/customers';
 
 const state = {
     customers: [],
-    errors: [],
 };
 
 const getters = {
     allCustomers: state => state.customers,
-    errors: state => state.errors
 };
 
 const actions = {
@@ -29,9 +27,9 @@ const actions = {
             );
 
             commit('newCustomer', response.data.Body);
-            commit('changeErrors', []);
+            return response.data;
         } catch (err) {
-            commit('changeErrors', err.response.data.Data);
+            return err.response.data;
         }
     },
     async updateCustomer({ commit }, customer) {
@@ -44,9 +42,9 @@ const actions = {
                 }
             );
             commit('updateCustomer', response.data.Body);
-            commit('changeErrors', []);
+            return response.data;
         } catch (err) {
-            commit('changeErrors', err.response.data.Data);
+            return err.response.data;
         }      
     },
     async deleteCustomer({ commit }, id) {
@@ -67,7 +65,6 @@ const mutations = {
         }
     },
     removeCustomer: (state, id) => state.customers = state.customers.filter(customer => customer.CustomerId !== id),
-    changeErrors: (state, errors) => state.errors = errors,
 };
 
 export default {

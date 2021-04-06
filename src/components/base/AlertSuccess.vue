@@ -1,7 +1,7 @@
 <template>
     <div class="alert alert-success">
         <div class="icon-thumb"></div>
-        <span class="title">{{ content }}</span>
+        <span class="title" v-text="content" />
         <span class="icon-times" @click="hideAlert"></span>
     </div>
 </template>
