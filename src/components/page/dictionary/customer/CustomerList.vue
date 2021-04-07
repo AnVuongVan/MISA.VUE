@@ -11,15 +11,8 @@
         </div>
 
         <div class="filter-bar">
-            <div class="filter-left">
-                <input type="text" class="icon-search input-search" style="width: 200px;" placeholder="Tim kiem theo ma, ten khach" />
-                <select>
-                    <option>Phòng đào tạo</option>
-                    <option>Phòng Công nghệ</option>
-                    <option>Phòng Marketting</option>
-                    <option>Phòng Nhân sự</option>
-                </select>
-            </div>
+            <CustomerFilter />
+            
             <div class="filter-right">
                 <button class="m-btn-remove m-second-button" @click="removeCustomer"></button>
                 <button class="m-btn-refresh m-second-button" @click="refreshListCustomers"></button>
@@ -64,20 +57,7 @@
             </table>
         </div>
 
-        <div class="paging-bar">
-            <p>Showing 1-10/1000 customers</p>
-            <div class="pagination">
-                <div class="item page first-page"><span></span></div>
-                <div class="item page prev-page"><span></span></div>
-                <div class="active item"><span>1</span></div>
-                <div class="item"><span>2</span></div>
-                <div class="item"><span>3</span></div>
-                <div class="item"><span>4</span></div>
-                <div class="item page next-page"><span></span></div>
-                <div class="item page last-page"><span></span></div>
-            </div>
-            <p>10 customers on a page</p>
-        </div>
+        <Paging />
 
         <span v-if="statusListDetail">
             <CustomerListDetail @statusModal="statusModal" @statusAlert="statusAlert" :customer="item" />
@@ -100,7 +80,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import CustomerListDetail from './CustomerListDetail';
+import CustomerFilter from './CustomerFilter'
 
+import Paging from '../../../base/Paging';
 import Popup from '../../../base/Popup';
 import AlertSuccess from '../../../base/AlertSuccess';
 //import AlertError from '../../../base/AlertError';
@@ -111,6 +93,8 @@ export default{
     name: 'CustomerList',
     components: {
         CustomerListDetail,
+        CustomerFilter,
+        Paging,
         Popup,
         AlertSuccess,
         //AlertError
@@ -191,9 +175,6 @@ export default{
     created() {
         this.fetchCustomers();
     },
-    updated() {
-        this.fetchCustomers();
-    }
 }
 </script>
 
@@ -206,13 +187,6 @@ export default{
         background-size: contain;
     }
 
-    .icon-search {
-        height: 16px;
-        background-image: url('../../../../assets/icon/search.png');
-        background-repeat: no-repeat;
-        background-position: 16px center;
-    }
-
     .filter-bar {
 		width: 100%;
 		height: 40px;
@@ -222,21 +196,6 @@ export default{
 		padding: 8px 0;
 		position: relative;
 	}
-
-	.filter-bar .filter-left {
-		margin-left: 12px;
-	}
-
-	.filter-left select {
-		padding: 9px;
-		border-radius: 3px;
-		border: 1px solid #bbb;
-		outline: none;
-		margin-right: 10px;
-		font-size: 13px;
-		font-weight: 600;
-	}
-
 
 	.filter-bar .filter-right {
 		position: absolute;

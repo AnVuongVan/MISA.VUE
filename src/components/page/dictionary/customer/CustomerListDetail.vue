@@ -56,7 +56,7 @@
                                         <div class="m-label">Nhom khach hang</div>
                                         <div class="m-control-select">
                                             <select v-model="formData.CustomerGroupId">  
-                                                <option v-for="group in customerGroups" :key="group.CustomerGroupId" 
+                                                <option v-for="group in allGroups" :key="group.CustomerGroupId" 
                                                 :value="group.CustomerGroupId">{{ group.CustomerGroupName }}</option>                                     
                                             </select>
                                         </div>
@@ -161,12 +161,11 @@
 </template>
 
 <script>
-import axios from 'axios'
 import moment from 'moment'
 import MISACode from '../../../../store/constant/code'
 import PropertyName from '../../../../store/constant/property'
 import Loading from '../../../base/Loading'
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { required, email } from 'vuelidate/lib/validators'
 
 export default{
@@ -191,7 +190,6 @@ export default{
                 CompanyTaxCode: '',
                 IsStopFollow: false,
             },
-            customerGroups: [],
             errors: {
                 CustomerCode: [],
                 PhoneNumber: []
@@ -212,7 +210,7 @@ export default{
         }
     },
     methods: {
-        ...mapActions(['addCustomer', 'updateCustomer']),
+        ...mapActions(['fetchCustomerGroups', 'dispatchCustomer']),
         validateStatus: function(validation) {
             return typeof validation != 'undefined'? validation.$error : false;
         },
@@ -232,52 +230,34 @@ export default{
                 CustomerCode: [],
                 PhoneNumber: []
             };
-            //if have CustomerId -> update
-            if (this.formData.CustomerId) {
-                this.updateCustomer(this.formData)
-                    .then(res => {
-                        switch (res.MISACode) {
-                            case MISACode.NOTVALID:
-                                res.Data.forEach(err => {
-                                    if (err.includes(PropertyName.CUSTOMER_CODE)) {
-                                        this.errors.CustomerCode.push(err);
-                                    } else if (err.includes(PropertyName.PHONE_NUMBER)) {
-                                        this.errors.PhoneNumber.push(err);
-                                    }
-                                });                              
-                                break;
-                            case MISACode.ISVALID:
-                            case MISACode.SUCCESS:                                
-                                this.$emit("statusModal", false);
+
+            var customerId = this.formData.customerId;
+
+            this.dispatchCustomer(this.formData)
+                .then(res => {
+                    switch (res.MISACode) {
+                        case MISACode.NOTVALID:
+                            res.Data.forEach(err => {
+                                if (err.includes(PropertyName.CUSTOMER_CODE)) {
+                                    this.errors.CustomerCode.push(err);
+                                } else if (err.includes(PropertyName.PHONE_NUMBER)) {
+                                    this.errors.PhoneNumber.push(err);
+                                }
+                            });                              
+                            break;
+                        case MISACode.ISVALID:
+                        case MISACode.SUCCESS:                                
+                            this.$emit("statusModal", false);
+                            if (customerId) {
                                 this.$emit("statusAlert", "UPDATE");
-                                break;
-                            default:
-                                break;
-                        }
-                    });
-            } else {
-                this.addCustomer(this.formData)
-                    .then(res => {
-                        switch (res.MISACode) {
-                            case MISACode.NOTVALID:
-                                res.Data.forEach(err => {
-                                    if (err.includes(PropertyName.CUSTOMER_CODE)) {
-                                        this.errors.CustomerCode.push(err);
-                                    } else if (err.includes(PropertyName.PHONE_NUMBER)) {
-                                        this.errors.PhoneNumber.push(err);
-                                    }
-                                });                              
-                                break;
-                            case MISACode.ISVALID:
-                            case MISACode.SUCCESS:                                
-                                this.$emit("statusModal", false);
+                            } else {
                                 this.$emit("statusAlert", "ADD");
-                                break;
-                            default:
-                                break;
-                        }
-                    });
-            }      
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                });
         },
         hideListDetail() {
             //pass value to parent components (CustomerList)
@@ -299,6 +279,9 @@ export default{
             this.isTooltip.PhoneNumber = !this.isTooltip.PhoneNumber;         
         }
     },
+    computed: {
+        ...mapGetters(['allGroups']),
+    },
     created() {
         //set value for form date when update
         this.formData = Object.assign({}, this.customer);
@@ -308,16 +291,7 @@ export default{
         }
     },
     mounted() {
-        //set value for select options of group
-        this.$nextTick(function () {
-            //const API_GROUP = 'http://api.manhnv.net/api/customergroups';
-            const API_GROUP = 'http://localhost:62509/api/v1/customergroups/';
-            axios.get(`${API_GROUP}`)
-                .then(response => {
-                    this.customerGroups = response.data;
-                })
-                .catch(err => console.log(err));
-        });
+        this.fetchCustomerGroups();
 
         //auto focus customer code input
         this.$refs.CustomerCode.focus();

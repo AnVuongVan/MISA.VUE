@@ -16,55 +16,60 @@ const actions = {
         const response = await axios.get(API_URL);
         commit('setCustomers', response.data);
     },
-    async addCustomer({ commit }, formData) {
-        try {
-            const response = await axios.post(API_URL, 
-                JSON.stringify(formData), {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            );
+    async dispatchCustomer({ commit }, customer) {
+        var method = 'POST';
+        var url = API_URL;
 
-            commit('newCustomer', response.data.Body);
+        if (customer.CustomerId) {
+            method = 'PUT';
+            url += '/' + customer.CustomerId;
+        }
+
+        try {
+            const response = await axios({
+                url: url,
+                method: method,
+                data: JSON.stringify(customer),
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                }
+            });
+            
+            commit('dispatchCustomer', response.data.Body);
             return response.data;
         } catch (err) {
             return err.response.data;
         }
-    },
-    async updateCustomer({ commit }, customer) {
-        try {
-            const response = await axios.put(`${API_URL}/${customer.CustomerId}`,
-                JSON.stringify(customer), {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            );
-            commit('updateCustomer', response.data.Body);
-            return response.data;
-        } catch (err) {
-            return err.response.data;
-        }      
     },
     async deleteCustomer({ commit }, id) {
         const response = await axios.delete(`${API_URL}/${id}`);
         if (response.data.MISACode == 200) {
             commit('removeCustomer', id);
         } 
+    },
+    async queryCustomers({ commit }, data) {
+        const params = {
+            query: data.query, 
+            groups: data.groups
+        };
+        const response = await axios.get(`${API_URL}/search`, { params });
+        console.log(response.data);
+        commit('queryCustomers', response.data); 
     }
 };
 
 const mutations = {
-    setCustomers: (state, customers) => (state.customers = customers),
-    newCustomer: (state, customer) => state.customers.unshift(customer),
-    updateCustomer: (state, customer) => {
+    setCustomers: (state, customers) => state.customers = customers,
+    dispatchCustomer: (state, customer) => {
         const index = state.customers.findIndex(item => item.CustomerId === customer.CustomerId);
         if (index !== -1) {
             state.customers.splice(index, 1, customer);
+        } else {
+            state.customers.unshift(customer);
         }
     },
     removeCustomer: (state, id) => state.customers = state.customers.filter(customer => customer.CustomerId !== id),
+    queryCustomers: (state, customers) => state.customers = customers,
 };
 
 export default {
