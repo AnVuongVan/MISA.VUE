@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="dialog-footer">
-                        <div class="dialog-footer-close">
+                        <div class="dialog-footer-close" tabindex="0">
                             <span id="btnCancel" @click="hideListDetail">Huy</span>
                         </div>
                         <div class="dialog-footer-save">
@@ -231,7 +231,7 @@ export default{
                 PhoneNumber: []
             };
 
-            var customerId = this.formData.customerId;
+            var customerId = this.formData.CustomerId;
 
             this.dispatchCustomer(this.formData)
                 .then(res => {
@@ -283,8 +283,9 @@ export default{
         ...mapGetters(['allGroups']),
     },
     created() {
-        //set value for form date when update
+        //set value for form data when update
         this.formData = Object.assign({}, this.customer);
+        
         //format date from database to show
         if (this.formData.DateOfBirth) {
             this.formData.DateOfBirth = moment(String(this.formData.DateOfBirth)).format('YYYY-MM-DD');

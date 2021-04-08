@@ -23,17 +23,17 @@
             <table border="1" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th fieldName="Checkbox"><input type="checkbox" /></th>
-                        <th fieldName="Index">#</th>
-                        <th fieldName="CustomerCode">Ma khach hang</th>
-                        <th fieldName="FullName">Ho va ten</th>
-                        <th fieldName="GenderName">Gioi tinh</th>
-                        <th fieldName="DateOfBirth">Ngay sinh</th>
-                        <th fieldName="PhoneNumber">So dien thoai</th>
-                        <th fieldName="Email">Email</th>
-                        <th fieldName="Address">Dia chi</th>
-                        <th fieldName="DebitAmount">Ma so thue</th>
-                        <th fieldName="MemberCardCode">Ma the thanh vien</th>
+                        <th><input type="checkbox" /></th>
+                        <th>#</th>
+                        <th>Ma khach hang</th>
+                        <th>Ho va ten</th>
+                        <th>Gioi tinh</th>
+                        <th>Ngay sinh</th>
+                        <th>So dien thoai</th>
+                        <th>Email</th>
+                        <th>Dia chi</th>
+                        <th>Ma so thue</th>
+                        <th>Ma the thanh vien</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,10 +70,6 @@
         <span v-if="statusAlertNotify">
             <AlertSuccess :statusAlertSuccess="statusAlertNotify" @isHide="statusAlert" />
         </span>
-
-        <!-- <span v-if="statusAlertError">
-            <AlertError :statusAlertError="statusAlertError" @isHide="statusAlert" />
-        </span> -->
     </div>
 </template>
 
@@ -85,7 +81,6 @@ import CustomerFilter from './CustomerFilter'
 import Paging from '../../../base/Paging';
 import Popup from '../../../base/Popup';
 import AlertSuccess from '../../../base/AlertSuccess';
-//import AlertError from '../../../base/AlertError';
 
 import moment from 'moment'
 
@@ -97,14 +92,12 @@ export default{
         Paging,
         Popup,
         AlertSuccess,
-        //AlertError
     },
     data() {
         return {
             statusListDetail: false,
             statusShowPopup: false,
             statusAlertNotify: '',
-            //statusAlertError: '',
             item: {},
             listIds: [],
             error: false

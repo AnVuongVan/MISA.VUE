@@ -62,4 +62,8 @@ export default {
         font-size: 13px;
         font-weight: 600;
     }
+
+    .filter-left select:focus {
+        border: 1px solid #019160;
+    }
 </style>

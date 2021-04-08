@@ -112,16 +112,17 @@
     width: 180px;
 }
 
-.m-control input:focus {
-    border: 1px solid #019160;
-}
-
 .customer-group-item .m-control-select select {
     width: 198px;
     padding: 10.5px 8px;
     border: 1px solid #ccc;
     border-radius: 3px;
     outline: none;
+}
+
+.m-control input:focus,
+.customer-group-item .m-control-select select:focus {
+    border: 1px solid #019160;
 }
 
 .gender-item {
@@ -145,6 +146,10 @@ input[type="radio"] {
     margin-right: 8px;
     margin-top: 1.5px;
     width: fit-content;
+}
+
+input[type="radio"]:focus {
+    outline: none;
 }
 
 .company-name-item>.m-control>input,
@@ -186,11 +191,13 @@ input[type="radio"] {
     user-select: none;
 }
 
+.dialog-footer-close:focus-visible,
 .dialog-footer-close:hover {
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 3px;
     color: white;
     cursor: pointer;
+    outline: none;
 }
 
 .dialog-footer-close~span {
@@ -210,6 +217,7 @@ input[type="radio"] {
     user-select: none;
 }
 
+.dialog-footer-save button:focus-visible,
 .dialog-footer-save button:hover {
     background-color: #2fbe8e;
     cursor: pointer;
